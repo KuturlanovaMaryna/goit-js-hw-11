@@ -4,7 +4,7 @@ import SimpleLightbox from 'simplelightbox';
 import "simplelightbox/dist/simple-lightbox.min.css";
 import { fetchImages } from "./js/pixabay-api";
 
-refs = {
+const refs = {
     searchForm: document.querySelector(".search-form"),
     searchSubmitBtn: document.querySelector(".search-btn"),
     inputForm: document.querySelector(".input-form"),
