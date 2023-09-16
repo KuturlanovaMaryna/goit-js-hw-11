@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Homework 11</title>
+    <link rel="stylesheet" href="./css/styles.css" />
   </head>
   <body>
     <form class="search-form" id="search-form">
@@ -14,8 +15,20 @@
         autocomplete="off"
         placeholder="Search images..."
       />
-      <button type="submit" class="search-btn">Search</button>
+      <button type="submit" class="search-btn">
+        <img
+          src="./images/iconsearch.png"
+          width="20"
+          height="20"
+          alt="icon-search"
+        />
+      </button>
     </form>
+
+    <div class="gallery">
+      <!-- Карточки изображений -->
+    </div>
+    <button type="button" class="load-more">Load more</button>
     <script src="index.js" type="module"></script>
   </body>
 </html>
