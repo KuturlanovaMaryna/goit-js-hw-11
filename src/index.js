@@ -3,14 +3,9 @@ import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import SimpleLightbox from 'simplelightbox';
 import "simplelightbox/dist/simple-lightbox.min.css";
 import { fetchImages } from "./js/pixabay-api";
+import { refs } from "./js/refs";
+import { renderGalleryMarkup} from "./js/createmarkup";
 
-const refs = {
-    searchForm: document.querySelector(".search-form"),
-    searchSubmitBtn: document.querySelector(".search-btn"),
-    inputForm: document.querySelector(".input-form"),
-    galleryImages: document.querySelector(".gallery"),
-    loadMoreBtn: document.querySelector(".load-more"),
-}
 
 
 const lightbox = new SimpleLightbox('.gallery a');
@@ -67,51 +62,6 @@ async function onFormSubmit(e) {
   lightbox.refresh();
 }
 
-function createImageMarkup(images) {
-  return images
-    .map(
-      ({
-        largeImageURL,
-        webformatURL,
-        tags,
-        likes,
-        views,
-        comments,
-        downloads,
-      }) => `<div class="photo-card">
-      <a href="${largeImageURL}">
-              <img
-              class="gallery__image img"
-              src="${webformatURL}"
-              alt="${tags}"
-              loading="lazy"
-            />
-  <div class="info">
-    <p class="info-item">
-      <b>Likes:</b>
-      <span>${likes}</span>
-    </p>
-    <p class="info-item">
-      <b>Views:</b>
-      <span>${views}</span>
-    </p>
-    <p class="info-item">
-      <b>Comments:</b>
-      <span>${comments}</span>
-    </p>
-    <p class="info-item">
-      <b>Downloads:</b>
-      <span>${downloads}</span>
-    </p>
-  </div>
-</div>`
-    )
-    .join('');
-}
-
-function renderGalleryMarkup(images) {
-  refs.galleryImages.insertAdjacentHTML('beforeend', createImageMarkup(images));
-}
 
 refs.loadMoreBtn.addEventListener('click', onClickBtnLoadMore);
 
@@ -121,6 +71,14 @@ async function onClickBtnLoadMore() {
 
   try {
     const galleryItems = await fetchImages(request, page);
+      let showPages = galleryItems.data.totalHits / perPage;
+
+    if (showPages <= page) {
+      hideBtnLoadMore();
+      Notify.failure(
+        "We're sorry, but you've reached the end of search results."
+      );
+    }
 
     renderGalleryMarkup(galleryItems.data.hits);
   } catch (error) {
